@@ -8,31 +8,31 @@ import VendingLimits from '../VendingLimits'
 const defaultCoins = [
   {
     value: 100,
-    amount: 1,
+    amount: 11,
   },
   {
     value: 50,
-    amount: 5,
+    amount: 24,
   },
   {
     value: 20,
-    amount: 10,
+    amount: 0,
   },
   {
     value: 10,
-    amount: 15,
+    amount: 99,
   },
   {
     value: 5,
-    amount: 20,
+    amount: 200,
   },
   {
     value: 2,
-    amount: 25
+    amount: 11
   },
   {
     value: 1,
-    amount: 50,
+    amount: 23,
   },
 ];
 
