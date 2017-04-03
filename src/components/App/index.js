@@ -98,9 +98,9 @@ class App extends React.Component {
     return (
       <div className="App" style={{maxWidth: '500px', margin: 'auto', fontFamily: 'helvetica'}}>
         <Card>
-          <h1 style={{margin: '0 0 5px 0', color: 'rgba(0, 0, 0, .9)'}}>Amount</h1>
-          <p style={{margin: '0 0 20px 0', width: '100%', color: 'rgba(0, 0, 0, .8)'}}>Enter the amount of change you would like to withdraw.</p>
-          <input type='number' value={this.state.value} style={{width: '100%', padding: '5px', boxSizing: 'border-box', outline: 'none', border: 'none', fontSize: '25px', background: '#fff', color: 'rgba(0, 0, 0, .8)', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0, 0, 0, .2)'}} onChange={e => this.updateValue(e.currentTarget.value)} />
+          <h1 style={{margin: '0 0 5px 0', color: 'rgba(0, 0, 0, .8)'}}>Amount</h1>
+          <p style={{margin: '0 0 20px 0', width: '100%', color: 'rgba(0, 0, 0, .7)'}}>Enter the amount of change you would like to withdraw.</p>
+          <input type='number' value={this.state.value} style={{width: '100%', padding: '10px 15px', boxSizing: 'border-box', outline: 'none', border: 'none', fontSize: '20px', background: '#fff', color: 'rgba(0, 0, 0, .8)', borderRadius: '3px', boxShadow: '0 1px 2px rgba(0, 0, 0, .2)'}} onChange={e => this.updateValue(e.currentTarget.value)} />
         </Card>
         <Change value={this.state.value} change={this.state.change} takeChange={this.takeChange} />
         <VendingLimits limit={this.state.limit} use={this.state.useLimit} toggleLimit={this.toggleLimit} />

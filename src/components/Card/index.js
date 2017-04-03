@@ -11,6 +11,6 @@ const styles = {
   flexWrap: 'wrap'
 };
 
-const Card = ({children, style = {}, className = ''}) => <div className={className} style={Object.assign(styles, style)}>{children}</div>
+const Card = ({children, style = {}, className = ''}) => <div className={className} style={Object.assign({...styles}, style)}>{children}</div>
 
 export default Card
