@@ -3,7 +3,7 @@ import orderLimit from './helpers/orderLimit/'
 
 // Our default list of coins
 
-    const coins = [
+    const defaultCoins = [
       {
         value: 100,
       },
@@ -36,10 +36,10 @@ import orderLimit from './helpers/orderLimit/'
  *    returns - (array) - Change calculated based on the coins we have and the value we started with
  */
 
-    const getChange = (val, limit = null) => {
+    const getChange = (_val, limit = null, max = false) => {
       
       // Make sure our value is a number or NaN for type checking below
-      val = parseInt(val);
+      let val = parseInt(_val, 10);
       
       // Return an empty array of coins if our value is NaN or an invalid amount
       if (Number.isNaN(val) || val <= 0) {
@@ -52,23 +52,24 @@ import orderLimit from './helpers/orderLimit/'
         
         // Set our limit to what we're passed if it is valid and to our default if it is not
         limit = checkLimit(limit) ?
-          limit :
-          coins
+          max ?
+            limit.filter(coin => (coin.value < max)) :
+            limit :
+          defaultCoins
       }
         
       // Set our coin limit if we aren't passed one
       if (limit === null)
-        limit = coins;
-        
-      // Make sure our limit is in order from greatest to lowest value
-      // Calculating for highest coin value first allows us to use minimal resources for figuring out which coin we need
+        limit = defaultCoins;
+
       limit = orderLimit(limit);
-        
+      
       // Reduce our limit of coins into an array of coins for our change
       return limit.reduce((change, c, i) => {
         
         // Set initial amount of coins based on our limit - true if we don't have a limited supply
         let amount = c.hasOwnProperty('amount') ? c.amount : true
+        
         // Set initial coin so we can calculate total number of current coin we need to return
         let coin = {
           value: c.value,
@@ -81,7 +82,7 @@ import orderLimit from './helpers/orderLimit/'
           // Add one to our coin's amount
           coin.amount += 1;
           // Update our val so we know how much we have left when searching for coins
-          val = val - coin.value;
+          val -= coin.value;
           
           // Reduce our coin's amount if we have a limited number of coins
           if (amount !== true)
@@ -93,9 +94,8 @@ import orderLimit from './helpers/orderLimit/'
           change.push(coin)
         
         // If we are on our last coin but don't have enough to finish
-        if (i === (limit.length - 1) && ! amount) {
-          console.warn('There are not enough coins to provide your change')
-          change = []
+        if (val && i === (limit.length - 1) && ! amount && change.length) {
+          change = getChange(_val, limit, change.shift().value)
         }
         
         // Return the array with our change in it
