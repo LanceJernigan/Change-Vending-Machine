@@ -36,10 +36,10 @@ import orderLimit from './helpers/orderLimit/'
  *    returns - (array) - Change calculated based on the coins we have and the value we started with
  */
 
-    const getChange = (val, limit = null, max = false) => {
+    const getChange = (_val, limit = null, max = false) => {
       
       // Make sure our value is a number or NaN for type checking below
-      val = parseInt(val, 10);
+      let val = parseInt(_val, 10);
       
       // Return an empty array of coins if our value is NaN or an invalid amount
       if (Number.isNaN(val) || val <= 0) {
@@ -53,7 +53,7 @@ import orderLimit from './helpers/orderLimit/'
         // Set our limit to what we're passed if it is valid and to our default if it is not
         limit = checkLimit(limit) ?
           max ?
-            limit.filter(coin => coin.value <= max) :
+            limit.filter(coin => (coin.value < max)) :
             limit :
           defaultCoins
       }
@@ -61,16 +61,15 @@ import orderLimit from './helpers/orderLimit/'
       // Set our coin limit if we aren't passed one
       if (limit === null)
         limit = defaultCoins;
-        
-      // Make sure our limit is in order from greatest to lowest value
-      // Calculating for highest coin value first allows us to use minimal resources for figuring out which coin we need
+
       limit = orderLimit(limit);
-        
+      
       // Reduce our limit of coins into an array of coins for our change
       return limit.reduce((change, c, i) => {
         
         // Set initial amount of coins based on our limit - true if we don't have a limited supply
         let amount = c.hasOwnProperty('amount') ? c.amount : true
+        
         // Set initial coin so we can calculate total number of current coin we need to return
         let coin = {
           value: c.value,
@@ -91,12 +90,12 @@ import orderLimit from './helpers/orderLimit/'
         };
         
         // If we need to return any of this coin, add it to our change array
-        if (coin.amount >= 0 && coin.amount > 0)
+        if (coin.amount > 0)
           change.push(coin)
         
         // If we are on our last coin but don't have enough to finish
-        if (i === (limit.length - 1) && ! amount) {
-          change = getChange(val, limit, change.shift().value)
+        if (val && i === (limit.length - 1) && ! amount && change.length) {
+          change = getChange(_val, limit, change.shift().value)
         }
         
         // Return the array with our change in it
